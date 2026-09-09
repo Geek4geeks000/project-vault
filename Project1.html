@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dark Neon Form with Validation</title>
+  
+  <!-- Font Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Global Resets & Layout */
+    * {
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;    
+      background-color: #0f1318;
+    }
+
+    /* Form Container */
+    .container {
+      width: 90vw;
+      max-width: 480px;
+      padding: 28px;
+      background-color: #1a1d20;
+      color: #e0e6e3;
+      border-radius: 16px;
+      border: 2px solid #00ff87;
+      box-shadow: 
+        0 0 10px rgba(0, 255, 135, 0.3),
+        0 0 25px rgba(0, 255, 135, 0.2),
+        0 10px 30px rgba(0, 0, 0, 0.6);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 0 15px rgba(0, 255, 135, 0.5),
+        0 0 35px rgba(0, 255, 135, 0.3),
+        0 15px 35px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Form Field Layouts */
+    .field-group {
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 6px;
+      color: #00ff88;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    /* General Inputs & Select */
+    .input {
+      display: block;
+      width: 100%;
+      padding: 11px 14px;
+      background-color: #1a1f26;
+      color: #ffffff;
+      border: 1.5px solid #00ff88;
+      border-radius: 6px;
+      outline: none;
+      font-size: 14px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input::placeholder {
+      color: #888888;
+    }
+
+    .input:focus {
+      border-color: #00ff88;
+      box-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+    }
+
+    /* Invalid Input State */
+    .input.invalid {
+      border-color: #ff3366 !important;
+      box-shadow: 0 0 8px rgba(255, 51, 102, 0.4) !important;
+    }
+
+    /* Error Message Text */
+    .error-msg {
+      display: block;
+      color: #ff3366;
+      font-size: 12px;
+      margin-top: 4px;
+      min-height: 16px;
+      font-weight: 500;
+    }
+
+    /* Select Dropdown Styling */
+    select.input {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ff88' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+    }
+
+    select.input:invalid,
+    select.input.placeholder-active {
+      color: #888888;
+    }
+
+    select.input option {
+      background-color: #1a1f26;
+      color: #ffffff;
+    }
+
+    select.input option:disabled {
+      color: #888888;
+    }
+
+    /* Radio Buttons Styling */
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      width: max-content;
+      color: #00ff88;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .radio-group input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      background-color: #1a1f26;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #00ff88;
+      border-radius: 50%;
+      cursor: pointer;
+      outline: none;
+      display: grid;
+      place-items: center;
+      margin: 0;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .radio-group input[type="radio"]:checked {
+      background-color: #00ff88;
+    }
+
+    .radio-group input[type="radio"]:checked::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #12161c;
+    }
+
+    /* Submit Button */
+    button[type="submit"] {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      background-color: #00ff88;
+      color: #0f141c;
+      font-weight: 700;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #00e078;
+    }
+
+    button[type="submit"]:active {
+      transform: scale(0.99);
+    }
+
+    /* Success Alert Box */
+    .success-alert {
+      display: none;
+      background-color: rgba(0, 255, 136, 0.15);
+      border: 1px solid #00ff88;
+      color: #00ff88;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="successAlert" class="success-alert">
+      ✓ Form submitted successfully!
+    </div>
+
+    <form id="registrationForm" novalidate>
+      <div class="field-group">
+        <label for="name" class="label">Name</label>
+        <input id="name" name="name" class="input" type="text" placeholder="Your name">
+        <span class="error-msg" id="nameError"></span>
+      </div>
+
+      <div class="field-group">
+        <label for="email" class="label">Email</label>
+        <input id="email" name="email" class="input" type="email" placeholder="xyz@gmail.com">
+        <span class="error-msg" id="emailError"></span>
+      </div>
+
+      <div class="field-group">
+        <label for="phone" class="label">Contact No.</label>
+        <input id="phone" name="phone" class="input" type="tel" placeholder="+91 9876543210">
+        <span class="error-msg" id="phoneError"></span>
+      </div>
+
+      <div class="field-group">
+        <label for="state" class="label">State / Union Territory</label>
+        <select id="state" name="state" class="input placeholder-active">
+          <option value="" selected disabled>Select your state</option>
+          <!-- States -->
+          <option value="AP">Andhra Pradesh</option>
+          <option value="AR">Arunachal Pradesh</option>
+          <option value="AS">Assam</option>
+          <option value="BR">Bihar</option>
+          <option value="CG">Chhattisgarh</option>
+          <option value="GA">Goa</option>
+          <option value="GJ">Gujarat</option>
+          <option value="HR">Haryana</option>
+          <option value="HP">Himachal Pradesh</option>
+          <option value="JH">Jharkhand</option>
+          <option value="KA">Karnataka</option>
+          <option value="KL">Kerala</option>
+          <option value="MP">Madhya Pradesh</option>
+          <option value="MH">Maharashtra</option>
+          <option value="MN">Manipur</option>
+          <option value="ML">Meghalaya</option>
+          <option value="MZ">Mizoram</option>
+          <option value="NL">Nagaland</option>
+          <option value="OD">Odisha</option>
+          <option value="PB">Punjab</option>
+          <option value="RJ">Rajasthan</option>
+          <option value="SK">Sikkim</option>
+          <option value="TN">Tamil Nadu</option>
+          <option value="TS">Telangana</option>
+          <option value="TR">Tripura</option>
+          <option value="UP">Uttar Pradesh</option>
+          <option value="UK">Uttarakhand</option>
+          <option value="WB">West Bengal</option>
+          <!-- Union Territories -->
+          <option value="AN">Andaman and Nicobar Islands</option>
+          <option value="CH">Chandigarh</option>
+          <option value="DH">Dadra and Nagar Haveli and Daman and Diu</option>
+          <option value="DL">Delhi</option>
+          <option value="JK">Jammu and Kashmir</option>
+          <option value="LA">Ladakh</option>
+          <option value="LD">Lakshadweep</option>
+          <option value="PY">Puducherry</option>
+        </select>
+        <span class="error-msg" id="stateError"></span>
+      </div>
+
+      <div class="field-group">
+        <label class="label">Gender</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="gender" value="male">
+            <span>Male</span>
+          </label>
+          <label>
+            <input type="radio" name="gender" value="female">
+            <span>Female</span>
+          </label>
+          <label>
+            <input type="radio" name="gender" value="other">
+            <span>Other</span>
+          </label>
+        </div>
+        <span class="error-msg" id="genderError"></span>
+      </div>
+
+      <button type="submit">Submit Form</button>
+    </form>
+  </div>
+</body>
+</html>
